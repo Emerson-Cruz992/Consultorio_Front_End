@@ -1,0 +1,162 @@
+<div class="container">
+  <!-- Hero Section -->
+  <div class="hero-section animate-fade-in-up">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="hero-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="m22 21-3-3m1-4a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Gestão de Pessoas
+        </h1>
+        <p class="hero-subtitle">
+          Gerencie e organize todas as informações de pessoas de forma moderna e eficiente
+        </p>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-number">{{ pessoas.length }}</div>
+          <div class="stat-label">{{ pessoas.length === 1 ? 'Pessoa' : 'Pessoas' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Bar -->
+  <div class="actions-bar animate-slide-in-right">
+    <div class="actions-left">
+      <div class="search-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input 
+          type="text" 
+          placeholder="Buscar pessoas..." 
+          [(ngModel)]="searchTerm"
+          (input)="filterPessoas()"
+          class="search-input"
+        >
+      </div>
+    </div>
+    
+    <div class="actions-right">
+      <button 
+        class="btn btn-primary btn-lg"
+        routerLink="/criar"
+        type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="20" y1="8" x2="20" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="23" y1="11" x2="17" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Nova Pessoa
+      </button>
+      
+      <button 
+        class="btn btn-secondary"
+        (click)="carregarPessoas()"
+        [disabled]="loading">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" [class.animate-pulse]="loading">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m21 3-3 5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m3 21 3-5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Atualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section" *ngIf="!loading">
+    <!-- Cards Grid -->
+    <div class="cards-grid" *ngIf="filteredPessoas.length > 0">
+      <div class="person-card animate-fade-in-up" 
+           *ngFor="let pessoa of filteredPessoas; trackBy: trackByPessoa"
+           [style.animation-delay.ms]="getPessoas().indexOf(pessoa) * 100">
+        <div class="card-header">
+          <div class="avatar">
+            <span>{{ getInitials(pessoa.nome) }}</span>
+          </div>
+          <div class="person-info">
+            <h3 class="person-name">{{ pessoa.nome }}</h3>
+            <p class="person-detail">{{ formatarCpf(pessoa.cpf) }}</p>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <div class="detail-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ pessoa.telefone }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ pessoa.dataNascimento | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          <button 
+            class="btn btn-secondary btn-sm"
+            [routerLink]="['/editar', pessoa.id]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Editar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state animate-fade-in-up" *ngIf="filteredPessoas.length === 0 && !loading">
+      <div class="empty-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">
+        {{ searchTerm ? 'Nenhuma pessoa encontrada' : 'Nenhuma pessoa cadastrada' }}
+      </h3>
+      <p class="empty-text" *ngIf="!searchTerm">
+        Comece adicionando a primeira pessoa ao sistema
+      </p>
+      <p class="empty-text" *ngIf="searchTerm">
+        Tente ajustar os filtros de busca
+      </p>
+      <button 
+        class="btn btn-primary btn-lg mt-6"
+        routerLink="/criar"
+        *ngIf="!searchTerm">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Cadastrar Primeira Pessoa
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state animate-fade-in-up" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Carregando pessoas...</p>
+  </div>
+</div>
